@@ -11,10 +11,10 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Define o diretório de trabalho
-WORKDIR /app
+WORKDIR /var/www/html
 
 # Copia o código fonte da aplicação para o container
-COPY . /app
+COPY . /var/www/html
 
 # Copia o arquivo composer.json e composer.lock para o diretório de trabalho
 COPY composer.json composer.lock ./
