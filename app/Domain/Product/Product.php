@@ -2,11 +2,20 @@
 
 namespace App\Domain\Product;
 
-class Product
-{
-    private $id;
-    private $name;
-    private $price;
-    private $available;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
+class Product extends Model
+{
+    use HasFactory;
+
+    protected $table = 'products';
+    protected $primaryKey = 'product_id';
+
+    protected $fillable = [
+        'name',
+        'price',
+        'description',
+        'available'
+    ];
 }
