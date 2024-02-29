@@ -7,14 +7,17 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && docker-php-ext-install pdo_mysql
 
-# Copia o código fonte da aplicação para o container
-COPY . /var/www/html
-
-# Define o diretório de trabalho
-WORKDIR /var/www/html
-
 # Instala o Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Define o diretório de trabalho
+WORKDIR /app
+
+# Copia o código fonte da aplicação para o container
+COPY . /app
+
+# Copia o arquivo composer.json e composer.lock para o diretório de trabalho
+COPY composer.json composer.lock ./
 
 # Instala as dependências do Composer
 RUN composer install
