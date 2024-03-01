@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Domain\Product\Product;
 use App\Domain\Product\ProductService;
-use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
 use Mockery;
 use Tests\TestCase;
