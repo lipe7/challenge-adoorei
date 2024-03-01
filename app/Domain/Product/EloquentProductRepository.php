@@ -2,7 +2,7 @@
 
 namespace App\Domain\Product;
 
-use App\Models\Product;
+
 use Illuminate\Database\Eloquent\Collection;
 
 class EloquentProductRepository implements ProductRepository
@@ -12,5 +12,10 @@ class EloquentProductRepository implements ProductRepository
         return Product::where('available', true)
             ->select('name', 'price', 'description')
             ->get();
+    }
+
+    public function findOrFail(int $id): ?Product
+    {
+        return Product::findOrFail($id);
     }
 }

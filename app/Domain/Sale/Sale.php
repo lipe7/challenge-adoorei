@@ -2,17 +2,18 @@
 
 namespace App\Domain\Sale;
 
-use App\Domain\ProductSale\ProductSale;
+use App\Domain\Product\Product;
 use Illuminate\Database\Eloquent\Model;
 
 class Sale extends Model
 {
     protected $table = 'sales';
     protected $primaryKey = 'sale_id';
-    protected $fillable = ['amount'];
+    protected $fillable = [];
 
     public function products()
     {
-        return $this->hasMany(ProductSale::class, 'sale_id', 'sale_id');
+        return $this->belongsToMany(Product::class, 'products_sales', 'sale_id', 'product_id')
+                    ->withPivot('product_sale_id');
     }
 }
