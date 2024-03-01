@@ -4,7 +4,9 @@ namespace App\Domain\Sale;
 
 use App\Domain\Product\ProductRepository;
 use App\Http\Requests\CreateSaleRequest;
+use App\Http\Requests\ListRequest;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
 
 class SaleService
@@ -55,6 +57,23 @@ class SaleService
 
                 $sale->products()->attach($productId, ['amount' => $amount]);
             }
+        }
+    }
+
+    public function listSales(ListRequest $filters)
+    {
+        try {
+            return $this->saleRepository->listSales($filters);
+        } catch (QueryException $ex) {
+            return response()->json([
+                'success' => false,
+                'message' => 'A database error occurred: ' . $ex->getCode()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (Exception $ex) {
+            return response()->json([
+                'success' => false,
+                'message' => 'an unexpected error occurred: ' . $ex->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

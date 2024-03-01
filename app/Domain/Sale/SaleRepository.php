@@ -2,7 +2,10 @@
 
 namespace App\Domain\Sale;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+
 interface SaleRepository
 {
     public function save(Sale $sale): Sale;
+    public function listSales($filters): LengthAwarePaginator;
 }

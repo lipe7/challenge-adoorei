@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domain\Sale\SaleService;
 use App\Http\Requests\CreateSaleRequest;
+use App\Http\Requests\ListRequest;
 
 class SaleController extends Controller
 {
@@ -17,5 +18,10 @@ class SaleController extends Controller
     public function createSale(CreateSaleRequest $request)
     {
         return $this->saleService->createSale($request);
+    }
+
+    public function list(ListRequest $request)
+    {
+        return $this->saleService->listSales($request);
     }
 }
