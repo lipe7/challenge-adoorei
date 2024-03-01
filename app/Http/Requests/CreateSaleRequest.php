@@ -15,7 +15,7 @@ class CreateSaleRequest extends FormRequest
     {
         return [
             'products' => ['required', 'array', 'min:1'],
-            'products.*.product_id' => ['required', 'exists:products,product_id'],
+            'products.*.product_id' => ['required', 'exists:products,product_id,available,true'],
             'products.*.amount' => ['required', 'numeric', 'min:1']
         ];
     }
