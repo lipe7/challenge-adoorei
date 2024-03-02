@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Database\Factories\ProductFactory;
 use Database\Factories\SaleFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -14,7 +15,6 @@ class SaleTest extends TestCase
     public function test_create_sale_with_invalid_data()
     {
         $response = $this->postJson('/api/sales', []);
-
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'message',
@@ -78,4 +78,25 @@ class SaleTest extends TestCase
         $this->assertDatabaseMissing('sales', ['sale_id' => $sale->sale_id]);
     }
 
+    public function testAddProductToSale()
+    {
+        $sale = SaleFactory::new()->create();
+
+        $product = ProductFactory::new()->create();
+
+        $data = [
+            'product_id' => $product->product_id,
+            'amount' => 1,
+        ];
+
+        $url = '/api/sales/' . $sale->sale_id . '/product';
+        $response = $this->post($url, $data);
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('products_sales', [
+            'sale_id' => $sale->sale_id,
+            'product_id' => $product->product_id,
+            'amount' => 1,
+        ]);
+    }
 }
