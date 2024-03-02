@@ -54,4 +54,38 @@ class EloquentSaleRepository implements SaleRepository
 
         return $sales;
     }
+
+    public function showSale($sale_id): array
+    {
+        $sale = Sale::with('products')
+            ->select([
+                'sales.sale_id',
+            ])
+            ->selectSub(function ($query) {
+                $query->selectRaw('SUM(products.price * products_sales.amount)')
+                    ->from('products_sales')
+                    ->join('products', 'products_sales.product_id', '=', 'products.product_id')
+                    ->whereColumn('products_sales.sale_id', 'sales.sale_id');
+            }, 'product_total_price')
+            ->where('sales.sale_id', $sale_id)
+            ->groupBy('sales.sale_id')
+            ->findOrFail($sale_id);
+
+        $formattedProducts = $sale->products->map(function ($product) {
+            return [
+                'product_id' => $product->product_id,
+                'nome' => $product->name,
+                'price' => $product->price,
+                'amount' => $product->pivot->amount,
+            ];
+        });
+
+        $formattedSale = [
+            'sale_id' => $sale->sale_id,
+            'amount' => $sale->product_total_price,
+            'products' => $formattedProducts,
+        ];
+
+        return $formattedSale;
+    }
 }

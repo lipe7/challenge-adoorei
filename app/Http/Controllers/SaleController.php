@@ -24,4 +24,9 @@ class SaleController extends Controller
     {
         return $this->saleService->listSales($request);
     }
+
+    public function show($sale_id)
+    {
+        return $this->saleService->showSale($sale_id);
+    }
 }

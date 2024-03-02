@@ -3,10 +3,13 @@
 namespace App\Domain\Sale;
 
 use App\Domain\Product\Product;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Sale extends Model
 {
+    use HasFactory;
+
     protected $table = 'sales';
     protected $primaryKey = 'sale_id';
     protected $fillable = [];

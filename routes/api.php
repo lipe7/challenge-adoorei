@@ -27,4 +27,5 @@ Route::prefix('products')->group(function () {
 Route::prefix('sales')->group(function () {
     Route::post('/', [SaleController::class, 'createSale']);
     Route::get('/', [SaleController::class, 'list']);
+    Route::get('/{id}', [SaleController::class, 'show']);
 });

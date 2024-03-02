@@ -76,4 +76,21 @@ class SaleService
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function showSale($sale_id)
+    {
+        try {
+            return $this->saleRepository->showSale($sale_id);
+        } catch (QueryException $ex) {
+            return response()->json([
+                'success' => false,
+                'message' => 'A database error occurred: ' . $ex->getCode()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (Exception $ex) {
+            return response()->json([
+                'success' => false,
+                'message' => 'an unexpected error occurred: ' . $ex->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
