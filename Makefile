@@ -22,3 +22,6 @@ fresh-db:
 test:
 	docker-compose exec app php artisan test --env=testing
 	docker-compose exec app php artisan config:clear
+reset-env:
+	docker-compose exec app php artisan config:clear
+	docker-compose exec app php artisan config:cache
