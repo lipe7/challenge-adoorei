@@ -24,7 +24,7 @@ class EloquentSaleRepository implements SaleRepository
                 'sales.sale_id',
             ])
             ->selectSub(function ($query) {
-                $query->selectRaw('SUM(products.price * products_sales.amount)')
+                $query->selectRaw('COALESCE(SUM(products.price * products_sales.amount), 0)')
                     ->from('products_sales')
                     ->join('products', 'products_sales.product_id', '=', 'products.product_id')
                     ->whereColumn('products_sales.sale_id', 'sales.sale_id');
@@ -62,7 +62,7 @@ class EloquentSaleRepository implements SaleRepository
                 'sales.sale_id',
             ])
             ->selectSub(function ($query) {
-                $query->selectRaw('SUM(products.price * products_sales.amount)')
+                $query->selectRaw('COALESCE(SUM(products.price * products_sales.amount), 0)')
                     ->from('products_sales')
                     ->join('products', 'products_sales.product_id', '=', 'products.product_id')
                     ->whereColumn('products_sales.sale_id', 'sales.sale_id');
