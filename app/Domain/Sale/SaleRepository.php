@@ -14,4 +14,5 @@ interface SaleRepository
     public function productExistsInSale(int $sale_id, int $product_id): bool;
     public function addProductToSale(int $sale_id, int $product_id, int $amount): void;
     public function updateProductAmount(int $sale_id, int $product_id, int $amount): void;
+    public function removeProductFromSale(int $sale_id, int $product_id): void;
 }

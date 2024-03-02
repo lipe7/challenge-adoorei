@@ -30,4 +30,5 @@ Route::prefix('sales')->group(function () {
     Route::get('/{sale_id}', [SaleController::class, 'show']);
     Route::delete('/{sale_id}/cancel', [SaleController::class, 'cancel']);
     Route::post('/{sale_id}/product', [SaleController::class, 'addProductToSale']);
+    Route::post('remove-product/{sale_id}/{product_id}', [SaleController::class, 'removeProductToSale']);
 });

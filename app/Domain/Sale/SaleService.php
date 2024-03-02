@@ -100,10 +100,33 @@ class SaleService
 
             $sale = $this->saleRepository->findOrFail($saleId);
             $existingProduct = $this->saleRepository->productExistsInSale($saleId, $productId);
+
             if ($existingProduct) {
                 $this->saleRepository->updateProductAmount($saleId, $productId, $amount);
             } else {
                 $this->saleRepository->addProductToSale($saleId, $productId, $amount);
+            }
+
+            return response()->json([
+                'success' => 'true',
+                'sale_id' => $sale->sale_id
+            ], Response::HTTP_CREATED);
+        } catch (AdooreiException $ex) {
+            throw new AdooreiException($ex->getMessage(), $ex->getCode(), $ex);
+        }
+    }
+
+    public function removeProductToSale($saleId, $productId)
+    {
+        try {
+            $sale = $this->saleRepository->findOrFail($saleId);
+
+            if($productId){
+                if($this->saleRepository->productExistsInSale($saleId, $productId)){
+                    $this->saleRepository->removeProductFromSale($saleId, $productId);
+                } else {
+                    throw new AdooreiException('the product is not associated with this sale', Response::HTTP_NOT_FOUND);
+                }
             }
 
             return response()->json([

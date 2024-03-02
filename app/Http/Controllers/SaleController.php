@@ -40,4 +40,9 @@ class SaleController extends Controller
     {
         return $this->saleService->addProductToSale($request);
     }
+
+    public function removeProductToSale($saleId, $productId)
+    {
+        return $this->saleService->removeProductToSale($saleId, $productId);
+    }
 }
