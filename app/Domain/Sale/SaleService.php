@@ -40,11 +40,8 @@ class SaleService
                 'success' => 'true',
                 'sale_id' => $sale->sale_id
             ], Response::HTTP_CREATED);
-        } catch (Exception $ex) {
-            return response()->json([
-                'success' => false,
-                'message' => 'an unexpected error occurred: ' . $ex->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (AdooreiException $ex) {
+            throw new AdooreiException($ex->getMessage(), $ex->getCode(), $ex);
         }
     }
 
@@ -65,16 +62,8 @@ class SaleService
     {
         try {
             return $this->saleRepository->listSales($filters);
-        } catch (QueryException $ex) {
-            return response()->json([
-                'success' => false,
-                'message' => 'A database error occurred: ' . $ex->getCode()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        } catch (Exception $ex) {
-            return response()->json([
-                'success' => false,
-                'message' => 'an unexpected error occurred: ' . $ex->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (AdooreiException $ex) {
+            throw new AdooreiException($ex->getMessage(), $ex->getCode(), $ex);
         }
     }
 
@@ -82,16 +71,8 @@ class SaleService
     {
         try {
             return $this->saleRepository->showSale($sale_id);
-        } catch (QueryException $ex) {
-            return response()->json([
-                'success' => false,
-                'message' => 'A database error occurred: ' . $ex->getCode()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        } catch (Exception $ex) {
-            return response()->json([
-                'success' => false,
-                'message' => 'an unexpected error occurred: ' . $ex->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (AdooreiException $ex) {
+            throw new AdooreiException($ex->getMessage(), $ex->getCode(), $ex);
         }
     }
 

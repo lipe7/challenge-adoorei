@@ -2,6 +2,7 @@
 
 namespace App\Domain\Product;
 
+use App\Exceptions\AdooreiException;
 use Illuminate\Database\Eloquent\Collection;
 
 class ProductService
@@ -15,6 +16,10 @@ class ProductService
 
     public function getAvailableProducts(): Collection
     {
-        return $this->productRepository->allAvailable();
+        try {
+            return $this->productRepository->allAvailable();
+        } catch (AdooreiException $ex) {
+            throw new AdooreiException($ex->getMessage(), $ex->getCode(), $ex);
+        }
     }
 }
