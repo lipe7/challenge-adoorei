@@ -3,6 +3,7 @@
 namespace App\Domain\Sale;
 
 use App\Domain\Product\ProductRepository;
+use App\Exceptions\AdooreiException;
 use App\Http\Requests\CreateSaleRequest;
 use App\Http\Requests\ListRequest;
 use Exception;
@@ -91,6 +92,21 @@ class SaleService
                 'success' => false,
                 'message' => 'an unexpected error occurred: ' . $ex->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function cancelSale($sale_id)
+    {
+        try {
+            $sale = $this->saleRepository->findOrFail($sale_id);
+            $this->saleRepository->cancelSale($sale);
+
+            return response()->json([
+                'success' => 'true',
+                'sale_id' => 'sale canceled'
+            ], Response::HTTP_OK);
+        } catch (AdooreiException $ex) {
+            throw new AdooreiException($ex->getMessage(), $ex->getCode(), $ex);
         }
     }
 }

@@ -28,4 +28,5 @@ Route::prefix('sales')->group(function () {
     Route::post('/', [SaleController::class, 'createSale']);
     Route::get('/', [SaleController::class, 'list']);
     Route::get('/{id}', [SaleController::class, 'show']);
+    Route::delete('/{id}/cancel', [SaleController::class, 'cancel']);
 });

@@ -88,4 +88,15 @@ class EloquentSaleRepository implements SaleRepository
 
         return $formattedSale;
     }
+
+    public function findOrFail(int $sale_id): ?Sale
+    {
+        return Sale::findOrFail($sale_id);
+    }
+
+    public function cancelSale($sale): void
+    {
+        $sale->products()->detach();
+        $sale->delete();
+    }
 }

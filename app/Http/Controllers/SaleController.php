@@ -29,4 +29,9 @@ class SaleController extends Controller
     {
         return $this->saleService->showSale($sale_id);
     }
+
+    public function cancel($sale_id)
+    {
+        return $this->saleService->cancelSale($sale_id);
+    }
 }
