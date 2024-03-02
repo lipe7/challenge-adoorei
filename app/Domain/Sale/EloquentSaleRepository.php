@@ -99,4 +99,24 @@ class EloquentSaleRepository implements SaleRepository
         $sale->products()->detach();
         $sale->delete();
     }
+
+    public function productExistsInSale(int $sale_id, int $product_id): bool
+    {
+        $sale = Sale::findOrFail($sale_id);
+        $products = $sale->products;
+
+        return $products->contains('product_id', $product_id);
+    }
+
+    public function addProductToSale(int $sale_id, int $product_id, int $amount): void
+    {
+        $sale = Sale::findOrFail($sale_id);
+        $sale->products()->attach($product_id, ['amount' => $amount]);
+    }
+
+    public function updateProductAmount(int $sale_id, int $product_id, int $amount): void
+    {
+        $sale = Sale::findOrFail($sale_id);
+        $sale->products()->updateExistingPivot($product_id, ['amount' => $amount]);
+    }
 }

@@ -4,10 +4,9 @@ namespace App\Domain\Sale;
 
 use App\Domain\Product\ProductRepository;
 use App\Exceptions\AdooreiException;
+use App\Http\Requests\AddProductToSaleRequest;
 use App\Http\Requests\CreateSaleRequest;
 use App\Http\Requests\ListRequest;
-use Exception;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
 
 class SaleService
@@ -86,6 +85,31 @@ class SaleService
                 'success' => 'true',
                 'sale_id' => 'sale canceled'
             ], Response::HTTP_OK);
+        } catch (AdooreiException $ex) {
+            throw new AdooreiException($ex->getMessage(), $ex->getCode(), $ex);
+        }
+    }
+
+    public function addProductToSale(AddProductToSaleRequest $request)
+    {
+        try {
+
+            $productId = $request['product_id'] ?? null;
+            $amount = $request['amount'] ?? null;
+            $saleId = $request->route('sale_id') ?? null;
+
+            $sale = $this->saleRepository->findOrFail($saleId);
+            $existingProduct = $this->saleRepository->productExistsInSale($saleId, $productId);
+            if ($existingProduct) {
+                $this->saleRepository->updateProductAmount($saleId, $productId, $amount);
+            } else {
+                $this->saleRepository->addProductToSale($saleId, $productId, $amount);
+            }
+
+            return response()->json([
+                'success' => 'true',
+                'sale_id' => $sale->sale_id
+            ], Response::HTTP_CREATED);
         } catch (AdooreiException $ex) {
             throw new AdooreiException($ex->getMessage(), $ex->getCode(), $ex);
         }
