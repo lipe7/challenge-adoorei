@@ -17,7 +17,7 @@ bash:
 	docker exec -it challenge-adoorei-app-1 bash
 
 fresh-db:
-	docker-compose exec app php artisan migrate --seed
+	docker-compose exec app php artisan migrate:fresh --seed
 
 test:
 	docker-compose exec app php artisan test --env=testing
