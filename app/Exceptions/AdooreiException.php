@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class AdooreiException extends Exception
@@ -22,6 +23,12 @@ class AdooreiException extends Exception
                 'success' => false,
                 'message' => 'a database error occurred: ' . $ex->getCode()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } elseif ($ex instanceof ValidationException) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed: ' . $ex->getMessage(),
+                'errors' => $ex->errors(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         } else {
             return response()->json([
                 'success' => false,
