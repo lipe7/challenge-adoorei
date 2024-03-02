@@ -2,15 +2,15 @@
 
 namespace Tests\Feature;
 
-use App\Domain\Product\Product;
-use App\Domain\Sale\Sale;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Foundation\Testing\WithFaker;
+use Database\Factories\SaleFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class SaleTest extends TestCase
 {
-    /** @test */
+    use RefreshDatabase;
+
+    // /** @test */
     public function test_create_sale_with_invalid_data()
     {
         $response = $this->postJson('/api/sales', []);
@@ -42,6 +42,27 @@ class SaleTest extends TestCase
             'prev_page_url',
             'to',
             'total'
+        ]);
+    }
+
+    public function test_can_show_sale()
+    {
+        $sale = SaleFactory::new()->create();
+
+        $url = '/api/sales/' . $sale->sale_id;
+        $response = $this->get($url);
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'sale_id',
+            'amount',
+            'products' => [
+                '*' => [
+                    'product_id',
+                    'nome',
+                    'price',
+                    'amount'
+                ]
+            ]
         ]);
     }
 }
