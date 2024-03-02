@@ -15,3 +15,10 @@ down:
 
 bash:
 	docker exec -it challenge-adoorei-app-1 bash
+
+fresh-db:
+	docker-compose exec app php artisan migrate --seed
+
+test:
+	docker-compose exec app php artisan test --env=testing
+	docker-compose exec app php artisan config:clear
