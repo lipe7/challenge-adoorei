@@ -65,4 +65,17 @@ class SaleTest extends TestCase
             ]
         ]);
     }
+
+    public function test_can_cancel_sale()
+    {
+        $sale = SaleFactory::new()->create();
+        $url = '/api/sales/' . $sale->sale_id . '/cancel';
+
+        $response = $this->delete($url);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseMissing('sales', ['sale_id' => $sale->sale_id]);
+    }
+
 }
